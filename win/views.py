@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from .models import Profile,Win,Comment,Like
 from .serializer import RegistrationSerializer
+from rest_framework.authtoken.models import Token
 
 # Create your views here.
 class RegistrationView(APIView):
@@ -11,3 +12,18 @@ class RegistrationView(APIView):
         users=User.objects.all()
         serializers = RegistrationSerializer(users, many=True)
         return Response(serializers.data)
+
+    def post(self, request, format=None):
+        serializer = RegistrationSerializer(data=request.data)
+        data = {}
+
+        if serializer.is_valid():
+
+            serializer.save()
+            user = User.objects.get(username=serializer.data['username'])
+            token = Token.objects.create(user=user).key
+            data['token'] = token
+
+        else:
+            data = serializer.errors
+        return Response(data)
