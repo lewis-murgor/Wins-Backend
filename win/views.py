@@ -41,14 +41,8 @@ class LoginView(APIView):
             user = authenticate(username=username, password=password)
             token, created = Token.objects.get_or_create(user=user)
 
-            user_manager = Token.objects.get(key=token).user.manager
-            if user_manager:
-                user_role = 'Manager'
-            else:
-                user_role = 'Employee'
-
             data['token'] = token.key
-            data['user_role'] = user_role
+            
 
         else:
             data = serializer.errors
