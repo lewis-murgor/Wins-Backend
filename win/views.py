@@ -48,3 +48,11 @@ class LoginView(APIView):
             data = serializer.errors
 
         return Response(data)
+
+class LogoutView(APIView):
+    def get(self, request, format=None):
+        tokens = Token.objects.filter(user=request.user)
+        for token in tokens:
+            token.delete()
+        content = {'success': ('User logged out.')}
+        return Response(content)
