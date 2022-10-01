@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from .models import Profile,Win,Comment,Like
-from .serializer import RegistrationSerializer,LoginSerializer
+from .serializer import RegistrationSerializer,LoginSerializer,ProfileSerializer
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 
@@ -56,3 +56,9 @@ class LogoutView(APIView):
             token.delete()
         content = {'success': ('User logged out.')}
         return Response(content)
+
+class ProfileView(APIView):
+    def get(self, request, format=None):
+        profiles = Profile.objects.all()
+        serializers = ProfileSerializer(profiles, many=True)
+        return Response(serializers.data)
