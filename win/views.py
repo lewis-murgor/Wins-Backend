@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from .models import Profile,Win,Comment,Like
-from .serializer import RegistrationSerializer,LoginSerializer,ProfileSerializer
+from .serializer import RegistrationSerializer,LoginSerializer,ProfileSerializer,WinSerializer
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 
@@ -70,3 +70,9 @@ class ProfileView(APIView):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class WinView(APIView):
+    def get(self, request, format=None):
+        wins = Win.objects.all()
+        serializers = WinSerializer(wins, many=True)
+        return Response(serializers.data)
