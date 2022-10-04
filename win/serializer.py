@@ -32,7 +32,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ('id','user','profile_photo','Bio')
 
-class WinSerializer(serializers.Serializer):
+class WinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Win
         fields = '__all__'
