@@ -29,7 +29,7 @@ class Win (models.Model):
     posted = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     likes = models.ManyToManyField(User,blank=True,related_name='likes')
-    comments = models.TextField()
+    comments = models.TextField(blank=True)
 
     def __str__(self):
         return self.title
