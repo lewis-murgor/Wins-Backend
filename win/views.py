@@ -93,6 +93,11 @@ class SingleProfile(APIView):
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, id,format=None):
+        profile = self.get_profile(id)
+        profile.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 class WinView(APIView):
     def get(self, request, format=None):
         wins = Win.objects.all()
