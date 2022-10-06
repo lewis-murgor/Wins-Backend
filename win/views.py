@@ -84,6 +84,15 @@ class SingleProfile(APIView):
         serializers = ProfileSerializer(profile)
         return Response(serializers.data)
 
+    def put(self, request, id, format=None):
+        profile = self.get_profile(id)
+        serializers = ProfileSerializer(profile, request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class WinView(APIView):
     def get(self, request, format=None):
         wins = Win.objects.all()
