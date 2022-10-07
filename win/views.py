@@ -111,6 +111,32 @@ class WinView(APIView):
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class SingleWin(APIView):
+    def get_win(self, id):
+        try:
+            return Win.objects.get(id=id)
+        except Win.DoesNotExist:
+            return Http404
+
+    def get(self, request, id, format=None):
+        win = self.get_win(id)
+        serializers = WinSerializer(win)
+        return Response(serializers.data)
+
+    def put(self, request, id, format=None):
+        win = self.get_win(id)
+        serializers = WinSerializer(win, request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id,format=None):
+        win = self.get_win(id)
+        win.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 class CommentView(APIView):
     def get(self, request, format=None):
         comments = Comment.objects.all()
