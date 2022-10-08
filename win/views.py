@@ -149,3 +149,29 @@ class CommentView(APIView):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class SingleComment(APIView):
+    def get_comment(self, id):
+        try:
+            return Comment.objects.get(id=id)
+        except Comment.DoesNotExist:
+            return Http404
+
+    def get(self, request, id, format=None):
+        comment = self.get_comment(id=id)
+        serializers = CommentSerializer(comment)
+        return Response(serializers.data)
+
+    def put(self, request, id, format=None):
+        comment = self.get_comment(id)
+        serializers = CommentSerializer(comment, request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id,format=None):
+        comment = self.get_comment(id)
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
