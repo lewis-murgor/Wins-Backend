@@ -10,4 +10,5 @@ urlpatterns = [
     path('comments/', views.CommentView.as_view()),
     path('profile_id/<int:id>/', views.SingleProfile.as_view()),
     path('win_id/<int:id>/', views.SingleWin.as_view()),
+    path('comment_id/<int:id>/', views.SingleComment.as_view()),
 ]
